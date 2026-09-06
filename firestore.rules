@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function role() {
+      return isSignedIn()
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
+        : null;
+    }
+    function isAdmin() {
+      return role() == 'admin';
+    }
+    function isCoordinator() {
+      return role() in ['admin', 'coordinator'];
+    }
+
+    // Directory of named accounts + their role. Only admins manage this list;
+    // every signed-in user may read it (needed to resolve their own role).
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /sessions/{sid} {
+      allow read: if isSignedIn();
+      allow create, update: if isCoordinator();
+
+      // One visit doc per token. Creation is registration-desk work;
+      // updates are only allowed by the role matching the visit's current stage,
+      // so a "vitals" login can never edit a doctor-stage record, etc.
+      match /visits/{token} {
+        allow read: if isSignedIn();
+        allow create: if role() in ['admin', 'coordinator', 'registration'];
+        allow update: if isSignedIn() && (
+          isCoordinator() ||
+          (role() == 'vitals'  && resource.data.stage == 'vitals') ||
+          (role() == 'ophthal' && resource.data.stage == 'ophthal') ||
+          (role() == 'doctor'  && resource.data.stage == 'doctor') ||
+          (role() == 'surgery' && resource.data.stage == 'surgery')
+        );
+      }
+    }
+
+    // Persistent patient directory, used to look up follow-ups across camps.
+    match /patients/{pid} {
+      allow read: if isSignedIn();
+      allow create, update: if role() in ['admin', 'coordinator', 'registration'];
+    }
+  }
+}

@@ -24,8 +24,16 @@ export default function Login() {
   return (
     <div style={{ minHeight: "100vh", background: C.blush, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui, sans-serif", padding: 16 }}>
       <form onSubmit={submit} style={cardStyle({ width: "100%", maxWidth: 360 })}>
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 20, color: C.crimson, marginBottom: 4 }}>Eye Camp</div>
-        <div style={{ fontSize: 12.5, color: C.inkSoft, marginBottom: 16 }}>Sign in with your account</div>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
+          <img
+            src="/logo.png"
+            alt="Logo"
+            style={{ width: 72, height: 72, objectFit: "contain" }}
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
+          />
+        </div>
+        <div style={{ fontFamily: "Georgia, serif", fontSize: 20, color: C.crimson, marginBottom: 4, textAlign: "center" }}>Eye Camp</div>
+        <div style={{ fontSize: 12.5, color: C.inkSoft, marginBottom: 16, textAlign: "center" }}>Sign in with your account</div>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ ...inputStyle, marginBottom: 10 }} required />
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ ...inputStyle, marginBottom: 14 }} required />
         {error && <div style={{ color: C.crimson, fontSize: 12.5, marginBottom: 10 }}>{error}</div>}

@@ -103,10 +103,24 @@ async function issueToken(sessionId, type, buildVisit) {
   });
 }
 
+// Full intake-sheet fields, captured once on the patient's persistent record.
 export async function registerNewPatient(session, form) {
   const patientRef = await addDoc(collection(db, "patients"), {
-    name: form.name, phone: form.phone, village: form.village,
-    age: form.age, gender: form.gender, createdAt: serverTimestamp(),
+    name: form.name,
+    phone: form.phone,
+    village: form.village,
+    age: form.age,
+    gender: form.gender,
+    fatherHusbandName: form.fatherHusbandName || "",
+    dob: form.dob || "",
+    education: form.education || "",
+    occupation: form.occupation || "",
+    address: form.address || "",
+    landline: form.landline || "",
+    bloodGroup: form.bloodGroup || "",
+    aadhar: form.aadhar || "",
+    bplRation: form.bplRation || "",
+    createdAt: serverTimestamp(),
   });
   await issueToken(session.id, "new", (token) => ({
     token, patientId: patientRef.id, name: form.name, village: form.village,

@@ -35,9 +35,17 @@ export default function App() {
     <div style={{ minHeight: "100vh", background: C.blush, fontFamily: "system-ui, -apple-system, sans-serif", color: C.ink, paddingBottom: 76 }}>
       <div style={{ background: C.crimson, color: C.white, padding: "14px 16px", position: "sticky", top: 0, zIndex: 20 }}>
         <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 18 }}>Eye Camp</div>
-            <div style={{ fontSize: 12, opacity: 0.85, marginTop: 2 }}>{name} · {role}</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <img
+              src="/logo.png"
+              alt=""
+              style={{ width: 34, height: 34, objectFit: "contain" }}
+              onError={(e) => { e.currentTarget.style.display = "none"; }}
+            />
+            <div>
+              <div style={{ fontFamily: "Georgia, serif", fontSize: 18 }}>Eye Camp</div>
+              <div style={{ fontSize: 12, opacity: 0.85, marginTop: 2 }}>{name} · {role}</div>
+            </div>
           </div>
           <button onClick={logout} style={{ background: "transparent", border: "none", color: "#FFD9D9", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: 12 }}>
             <LogOut size={15} /> Sign out

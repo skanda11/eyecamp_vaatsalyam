@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Search, ChevronRight, X, AlertTriangle } from "lucide-react";
+import { Plus, Search, ChevronRight, X, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
 import { C, cardStyle, inputStyle } from "../styles";
 import { useLatestSession, usePatients, registerNewPatient, issueFollowupToken } from "../lib/campData";
 import { Button } from "./Dashboard";
@@ -45,15 +45,23 @@ export default function Register() {
   );
 }
 
+const BLANK = {
+  name: "", phone: "", village: "", age: "", gender: "",
+  fatherHusbandName: "", dob: "", education: "", occupation: "",
+  address: "", landline: "", bloodGroup: "", aadhar: "", bplRation: "",
+};
+
 function NewPatientForm({ onBack, onSubmit }) {
-  const [f, setF] = useState({ name: "", phone: "", village: "", age: "", gender: "" });
+  const [f, setF] = useState(BLANK);
+  const [more, setMore] = useState(false);
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   const valid = f.name.trim() && f.phone.trim();
   return (
     <div style={cardStyle()}>
       <FormHeader title="New Patient" onBack={onBack} />
+
       <Field label="Full name"><input value={f.name} onChange={set("name")} style={inputStyle} /></Field>
-      <Field label="Phone number"><input value={f.phone} onChange={set("phone")} style={inputStyle} inputMode="tel" /></Field>
+      <Field label="Mobile number"><input value={f.phone} onChange={set("phone")} style={inputStyle} inputMode="tel" /></Field>
       <Field label="Village"><input value={f.village} onChange={set("village")} style={inputStyle} /></Field>
       <div style={{ display: "flex", gap: 10 }}>
         <Field label="Age"><input value={f.age} onChange={set("age")} style={inputStyle} inputMode="numeric" /></Field>
@@ -63,7 +71,30 @@ function NewPatientForm({ onBack, onSubmit }) {
           </select>
         </Field>
       </div>
-      <Button full disabled={!valid} onClick={() => onSubmit(f)}><Plus size={16} /> Register &amp; Issue Token</Button>
+
+      <button type="button" onClick={() => setMore(!more)} style={{ display: "flex", alignItems: "center", gap: 6, background: "transparent", border: "none", color: C.crimson, fontWeight: 700, fontSize: 12.5, padding: "6px 0 14px", cursor: "pointer" }}>
+        {more ? <ChevronUp size={15} /> : <ChevronDown size={15} />} {more ? "Hide" : "Add"} intake sheet details
+      </button>
+
+      {more && (
+        <div style={{ marginBottom: 4 }}>
+          <Field label="Father / Husband's name"><input value={f.fatherHusbandName} onChange={set("fatherHusbandName")} style={inputStyle} /></Field>
+          <Field label="Date of birth (if known)"><input type="date" value={f.dob} onChange={set("dob")} style={inputStyle} /></Field>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Field label="Education"><input value={f.education} onChange={set("education")} style={inputStyle} /></Field>
+            <Field label="Occupation"><input value={f.occupation} onChange={set("occupation")} style={inputStyle} /></Field>
+          </div>
+          <Field label="Home address"><textarea rows={2} value={f.address} onChange={set("address")} style={{ ...inputStyle, resize: "vertical" }} /></Field>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Field label="Landline (optional)"><input value={f.landline} onChange={set("landline")} style={inputStyle} inputMode="tel" /></Field>
+            <Field label="Blood group"><input value={f.bloodGroup} onChange={set("bloodGroup")} style={inputStyle} placeholder="e.g. B+" /></Field>
+          </div>
+          <Field label="Aadhar number"><input value={f.aadhar} onChange={set("aadhar")} style={inputStyle} inputMode="numeric" /></Field>
+          <Field label="BPL / Ration card details"><input value={f.bplRation} onChange={set("bplRation")} style={inputStyle} /></Field>
+        </div>
+      )}
+
+      <Button full disabled={!valid} onClick={() => onSubmit(f)}><Plus size={16} /> Register & Issue Token</Button>
     </div>
   );
 }

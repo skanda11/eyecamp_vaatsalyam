@@ -5,12 +5,12 @@ import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager
 // Paste the config object from:
 // Firebase Console -> Project settings -> General -> "Your apps" -> Web app
 const firebaseConfig = {
-  apiKey: "REPLACE_ME",
-  authDomain: "REPLACE_ME.firebaseapp.com",
-  projectId: "REPLACE_ME",
-  storageBucket: "REPLACE_ME.appspot.com",
-  messagingSenderId: "REPLACE_ME",
-  appId: "REPLACE_ME",
+  apiKey: "AIzaSyA9K2THwfsUvAuQ_IccTQYxzT7J2DY1GFs",
+  authDomain: "eye-camp-vaatsalyam.firebaseapp.com",
+  projectId: "eye-camp-vaatsalyam",
+  storageBucket: "eye-camp-vaatsalyam.firebasestorage.app",
+  messagingSenderId: "989993189528",
+  appId: "1:989993189528:web:a20f67d99c72acfc9850ed",
 };
 
 export const app = initializeApp(firebaseConfig);
